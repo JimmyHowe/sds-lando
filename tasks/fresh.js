@@ -9,16 +9,20 @@ module.exports = lando => ({
 
         const app = lando.getApp(options._app.root);
 
-        app.rebuild(app).then((rebuild) => {
+        console.log("Rebuilding app...");
 
-            lando.engine.start(app);
+        app.rebuild(app).then(function () {
 
-            return lando.engine.run({
-                id: 'mywow_appserver_1',
-                cmd: ['install']
+            console.log("Starting app...");
+
+            app.start(app).then(function (start) {
+
+                console.log("Installing app...");
+
+                let install = app.tasks.find(element => element.command === 'install');
+
+                install.run();
             });
-
         });
-
     },
 });
